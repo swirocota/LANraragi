@@ -58,11 +58,11 @@ sub get_tags {
     my ( $save_jpn_title, $save_additional_metadata, $use_exhentai ) = @_;
 
     # Use the URL from oneshot parameters or source tag first when applicable.
-    if ( $lrr_info->{oneshot_param} =~ /e(?:x|-)hentai\.org\/g\/(\d+)\/([0-9a-z]+)/i ) {
+    if ( $lrr_info->{oneshot_param} =~ /(?:https?:\/\/)?e(?:x|-)hentai\.org\/g\/(\d+)\/([0-9a-z]+)(?:\/)?/i ) {
         $gallery_id    = $1;
         $gallery_token = $2;
         $logger->debug("Directly using gallery ID $gallery_id and token $gallery_token from oneshot parameters.");
-    } elsif ( $lrr_info->{existing_tags} =~ /source:e(?:x|-)hentai\.org\/g\/(\d+)\/([0-9a-z]+)/i ) {
+    } elsif ( $lrr_info->{existing_tags} =~ /source:(?:https?:\/\/)?e(?:x|-)hentai\.org\/g\/(\d+)\/([0-9a-z]+)(?:\/)?/i ) {
         $gallery_id    = $1;
         $gallery_token = $2;
         $logger->debug("Directly using gallery ID $gallery_id and token $gallery_token from source tag.");
@@ -94,7 +94,7 @@ sub get_tags {
         # successfully retrieved; otherwise $metadata{tags} may only contain this source tag and truly untagged
         # galleries may be incorrectly hidden.
         my $host = ( $use_exhentai ? 'exhentai.org' : 'e-hentai.org' );
-        $metadata{tags} .= ", source:$host/g/$gallery_id/$gallery_token";
+        $metadata{tags} .= ", source:https://$host/g/$gallery_id/$gallery_token";
 
         # Return a hash containing the new metadata to be added to LRR.
         return %metadata;
